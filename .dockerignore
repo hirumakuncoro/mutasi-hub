@@ -1,0 +1,14 @@
+.git
+.github
+node_modules
+dist
+data
+.env
+.env.*
+coverage
+*.log
+*.tsbuildinfo
+.DS_Store
+req.http
+plan.md
+
