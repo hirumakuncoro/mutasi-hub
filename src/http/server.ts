@@ -23,6 +23,7 @@ export function createHttpServer(input: CreateHttpServerInput): Server<undefined
     fetch(request, server) {
       return routeRequest(request, server, {
         config,
+        logger,
         paymentIntentHandler,
       });
     },

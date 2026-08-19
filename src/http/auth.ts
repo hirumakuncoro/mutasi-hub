@@ -1,12 +1,14 @@
 import type { Server } from "bun";
 
 import type { AppConfig } from "../config";
+import type { Logger } from "../logger";
 import { json } from "./response";
 
 export function authorizeInternalRequest(
   request: Request,
   server: Server<undefined>,
   config: AppConfig,
+  logger: Logger,
 ): Response | null {
   const authorization = request.headers.get("authorization");
   if (authorization !== `Bearer ${config.internalApiKey}`) {
@@ -14,7 +16,19 @@ export function authorizeInternalRequest(
   }
 
   const clientIp = getClientIp(request, server);
+  logger.debug("internal request client ip resolved", {
+    clientIp,
+    forwardedFor: request.headers.get("x-forwarded-for"),
+    realIp: request.headers.get("x-real-ip"),
+    socketIp: server.requestIP(request)?.address ?? null,
+    allowedIps: config.internalAllowedIps,
+  });
+
   if (!clientIp || !config.internalAllowedIps.includes(clientIp)) {
+    logger.debug("internal request forbidden by ip allowlist", {
+      clientIp,
+      allowedIps: config.internalAllowedIps,
+    });
     return json({ error: "Forbidden" }, 403);
   }
 
