@@ -24,13 +24,14 @@ export function authorizeInternalRequest(
     allowedIps: config.internalAllowedIps,
   });
 
-  if (!clientIp || !config.internalAllowedIps.includes(clientIp)) {
-    logger.debug("internal request forbidden by ip allowlist", {
-      clientIp,
-      allowedIps: config.internalAllowedIps,
-    });
-    return json({ error: "Forbidden" }, 403);
-  }
+  // Temporarily disabled while verifying proxy/client IP behavior behind Traefik.
+  // if (!clientIp || !config.internalAllowedIps.includes(clientIp)) {
+  //   logger.debug("internal request forbidden by ip allowlist", {
+  //     clientIp,
+  //     allowedIps: config.internalAllowedIps,
+  //   });
+  //   return json({ error: "Forbidden" }, 403);
+  // }
 
   return null;
 }
