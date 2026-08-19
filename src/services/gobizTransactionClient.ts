@@ -45,6 +45,11 @@ export class GoBizTransactionClient {
     const url = new URL(this.baseUrl);
     url.searchParams.set("from", "0");
     url.searchParams.set("size", String(input.size ?? 20));
+    url.searchParams.set("statuses", "SETTLEMENT,CAPTURE,REFUND,PARTIAL_REFUND");
+    url.searchParams.set(
+      "payment_types",
+      "QRIS,GOPAY,OFFLINE_CREDIT_CARD,OFFLINE_DEBIT_CARD,CREDIT_CARD",
+    );
     url.searchParams.set("start_time", input.startTime);
     url.searchParams.set("end_time", input.endTime);
     url.searchParams.set("merchant_ids", input.merchantId);
